@@ -42,10 +42,12 @@ def generate_random_correlated(n,cov_mat,num_levels,sparsity=0,clustering=0,RNG=
     for v in data.columns:
         diff_Vals = data[v].unique()
         dict_to_replace = {diff_Vals[i]:str(i) for i in range(len(diff_Vals)) }
-        data[v].replace(dict_to_replace,inplace=True)
+        # Convert to string type first to avoid pandas Categorical write constraints
+        data[v] = data[v].astype(str).replace(dict_to_replace)
     
     for i in range(cov_mat.shape[0]):
-        df[str(i)] = pd.Categorical(map(str, data[str(i)].astype(int)))
+        # Safely cast values to float, then int, and finally to string to build a clean Categorical column
+        df[str(i)] = pd.Categorical(data[str(i)].astype(float).astype(int).astype(str))
         
     data_dum = pd.get_dummies(df).sort_index(axis=1,key= lambda index: [(int(x.split('_')[0]),int(x.split('_')[1])) for x in index]  )
     p = len(data_dum.columns)
