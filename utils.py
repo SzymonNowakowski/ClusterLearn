@@ -28,12 +28,12 @@ def generate_random_correlated(n,cov_mat,num_levels,sparsity=0,clustering=0,RNG=
     num_levels: number of levels for each categorical predictor
     noise_sigma: The standard deviation of the noise
     '''
-    rpy2.robjects.numpy2ri.activate()
-    pandas2ri.activate()
     importr('CatReg')
     r = robjects.r
     
-    data = ro.conversion.get_conversion().rpy2py(r['CorrelatedDesignMatrix'](n,cov_mat,num_levels))
+    with localconverter(ro.default_converter + rpy2.robjects.numpy2ri.converter + pandas2ri.converter):
+        data = ro.conversion.get_conversion().rpy2py(r['CorrelatedDesignMatrix'](n,cov_mat,num_levels))
+        
     data.columns = map(str,range(len(data.columns)))
     
     df = pd.DataFrame()
@@ -258,12 +258,10 @@ def validate_scope(df_train, X_val, y_train, y_val, p,n_cat, n_lambda, rcont = 0
     
   
     
-    rpy2.robjects.numpy2ri.activate()
-    pandas2ri.activate()
     importr('CatReg')
     r = robjects.r
     
-    with localconverter(ro.default_converter + pandas2ri.converter):
+    with localconverter(ro.default_converter + rpy2.robjects.numpy2ri.converter + pandas2ri.converter):
       r_from_pd_df_train = ro.conversion.py2rpy(df_train)
       
       
@@ -356,12 +354,10 @@ def validate_logistic_scope(df_train, df_test, y_train, p,n_cat, rcont = 0,gamma
     '''
     
     
-    rpy2.robjects.numpy2ri.activate()
-    pandas2ri.activate()
     importr('CatReg')
     r = robjects.r
-    
-    with localconverter(ro.default_converter + pandas2ri.converter):
+
+    with localconverter(ro.default_converter + rpy2.robjects.numpy2ri.converter + pandas2ri.converter):
         r_from_pd_df_train = ro.conversion.py2rpy(df_train)
 
       
