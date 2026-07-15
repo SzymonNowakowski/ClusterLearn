@@ -82,7 +82,7 @@ def generate_random_correlated(n,cov_mat,num_levels,sparsity=0,clustering=0,RNG=
 
 def BCD_wrapper(X,y,Xval,yval,Xcont=None,Xcontval=None,classification=False,numlevels_=None,l0_list = [0.0],l1_list = [0.0],l2_list = [0.01],whole_block=False ):
     
-    lib = cdll.LoadLibrary('../ClusterLearn/univariate/BCD_solver.so')
+    lib = cdll.LoadLibrary('/opt/ClusterLearn/univariate/proximal_c.so')
     lib.BCD_solve.argtypes = (ctypes.c_int,ctypes.c_int,ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_double), ctypes.c_int, ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double), ctypes.c_int,ctypes.POINTER(ctypes.c_double), ctypes.c_int,ctypes.POINTER(ctypes.c_double), ctypes.c_int,ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double) )
     lib.BCD_continuous_solve.argtypes = (ctypes.c_int,ctypes.c_int,ctypes.c_int,ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double), ctypes.c_int, ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double), ctypes.c_int,ctypes.POINTER(ctypes.c_double), ctypes.c_int,ctypes.POINTER(ctypes.c_double), ctypes.c_int,ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double) )
     
