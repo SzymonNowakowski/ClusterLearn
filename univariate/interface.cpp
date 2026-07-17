@@ -85,9 +85,9 @@ extern "C" void BCD_solve(int n,int r, int *x, double *y,int nval,int *xval, dou
     if (val_errors) {
         flat_index = 0;
 
-        for (int i = 0; i < lambda0.size(); i++) {
-            for (int j = 0; j < lambda1.size(); j++) {
-                for (int k = 0; k < lambda2.size(); k++) {
+        for (int i = 0; i < l0_vec.size(); i++) {
+            for (int j = 0; j < l1_vec.size(); j++) {
+                for (int k = 0; k < l2_vec.size(); k++) {
 
                     // copy value from 3D vector in the solver object and save it to a flat array
                     val_errors[flat_index] = solver->val_errors[i][j][k];
@@ -147,9 +147,9 @@ extern "C" void BCD_classfier_solve(int n,int r, int *x, int *y,int nval,int *xv
     if (val_errors) {
         flat_index = 0;
 
-        for (int i = 0; i < lambda0.size(); i++) {
-            for (int j = 0; j < lambda1.size(); j++) {
-                for (int k = 0; k < lambda2.size(); k++) {
+        for (int i = 0; i < l0_vec.size(); i++) {
+            for (int j = 0; j < l1_vec.size(); j++) {
+                for (int k = 0; k < l2_vec.size(); k++) {
 
                     // copy value from 3D vector in the solver object and save it to a flat array
                     val_errors[flat_index] = solver->val_errors[i][j][k];
@@ -231,9 +231,9 @@ extern "C" void BCD_continuous_solve(int n,int r,int rcont, int *x,double* xcont
     if (val_errors) {
         flat_index = 0;
 
-        for (int i = 0; i < lambda0.size(); i++) {
-            for (int j = 0; j < lambda1.size(); j++) {
-                for (int k = 0; k < lambda2.size(); k++) {
+        for (int i = 0; i < l0_vec.size(); i++) {
+            for (int j = 0; j < l1_vec.size(); j++) {
+                for (int k = 0; k < l2_vec.size(); k++) {
 
                     // copy value from 3D vector in the solver object and save it to a flat array
                     val_errors[flat_index] = solver->val_errors[i][j][k];
@@ -318,9 +318,9 @@ extern "C" void BCD_classfier_continuous_solve(int n,int r,int rcont, int *x,dou
     if (val_errors) {
         flat_index = 0;
 
-        for (int i = 0; i < lambda0.size(); i++) {
-            for (int j = 0; j < lambda1.size(); j++) {
-                for (int k = 0; k < lambda2.size(); k++) {
+        for (int i = 0; i < l0_vec.size(); i++) {
+            for (int j = 0; j < l1_vec.size(); j++) {
+                for (int k = 0; k < l2_vec.size(); k++) {
 
                     // copy value from 3D vector in the solver object and save it to a flat array
                     val_errors[flat_index] = solver->val_errors[i][j][k];
