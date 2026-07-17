@@ -138,7 +138,7 @@ def BCD_wrapper(X,y,Xval,yval,Xcont=None,Xcontval=None,classification=False,numl
     
     numlevels=numlevels.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
     beta = np.zeros(p+1,dtype=np.double)
-    val_errors = np.zeros(nl0_c * nl1_c * nl2_c,dtype=np.double)
+    val_errors = np.zeros(nl0_c.value * nl1_c.value * nl2_c.value, dtype=np.double)
     if rcont == 0:
         start = time.time()
         if classification :
