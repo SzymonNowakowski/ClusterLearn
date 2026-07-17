@@ -33,6 +33,16 @@ Solver::Solver(std::shared_ptr<std::vector<std::vector<int> > > & X_,std::shared
             }
         }
     }
+
+    // Initialize val_errors with the correct dimensions
+    val_errors = std::vector<std::vector<std::vector<double>>>(lambda0.size());
+    for(int i = 0; i < lambda0.size(); i++){
+        val_errors[i] = std::vector<std::vector<double>>(lambda1.size());
+        for(int j = 0; j < lambda1.size(); j++){
+            val_errors[i][j] = std::vector<double>(lambda2.size(), 0.0);
+        }
+    }
+
 }
 
 Solver::Solver(std::shared_ptr<std::vector<std::vector<int> > > & X_,std::shared_ptr<std::vector<int> > & y_, std::vector<double> & l0,std::vector<double> & l1,std::vector<double> & l2, std::shared_ptr<std::vector<std::vector<double> > > beta0_,bool verbose_) {
@@ -62,6 +72,16 @@ Solver::Solver(std::shared_ptr<std::vector<std::vector<int> > > & X_,std::shared
             }
         }
     }
+
+    // Initialize val_errors with the correct dimensions
+    val_errors = std::vector<std::vector<std::vector<double>>>(lambda0.size());
+    for(int i = 0; i < lambda0.size(); i++){
+        val_errors[i] = std::vector<std::vector<double>>(lambda1.size());
+        for(int j = 0; j < lambda1.size(); j++){
+            val_errors[i][j] = std::vector<double>(lambda2.size(), 0.0);
+        }
+    }
+
 }
 
 Solver::Solver(std::shared_ptr<std::vector<std::vector<int> > > & X_,std::shared_ptr<std::vector<std::vector<double> > > & X_cont_ ,std::shared_ptr<std::vector<double> > & y_, std::vector<double> & l0,std::vector<double> & l1,std::vector<double> & l2, std::shared_ptr<std::vector<std::vector<double> > > beta0_,bool verbose_) {
@@ -99,6 +119,16 @@ Solver::Solver(std::shared_ptr<std::vector<std::vector<int> > > & X_,std::shared
             }
         }
     }
+
+    // Initialize val_errors with the correct dimensions
+    val_errors = std::vector<std::vector<std::vector<double>>>(lambda0.size());
+    for(int i = 0; i < lambda0.size(); i++){
+        val_errors[i] = std::vector<std::vector<double>>(lambda1.size());
+        for(int j = 0; j < lambda1.size(); j++){
+            val_errors[i][j] = std::vector<double>(lambda2.size(), 0.0);
+        }
+    }
+
 }
 
 Solver::Solver(std::shared_ptr<std::vector<std::vector<int> > > & X_,std::shared_ptr<std::vector<std::vector<double> > > & X_cont_ ,std::shared_ptr<std::vector<int> > & y_, std::vector<double> & l0,std::vector<double> & l1,std::vector<double> & l2, std::shared_ptr<std::vector<std::vector<double> > > beta0_,bool verbose_) {
@@ -146,6 +176,16 @@ Solver::Solver(std::shared_ptr<std::vector<std::vector<int> > > & X_,std::shared
     if(VERBOSE){
         log_file << "Done Creating solver " << std::flush << std::endl;
     }
+
+    // Initialize val_errors with the correct dimensions
+    val_errors = std::vector<std::vector<std::vector<double>>>(lambda0.size());
+    for(int i = 0; i < lambda0.size(); i++){
+        val_errors[i] = std::vector<std::vector<double>>(lambda1.size());
+        for(int j = 0; j < lambda1.size(); j++){
+            val_errors[i][j] = std::vector<double>(lambda2.size(), 0.0);
+        }
+    }
+
 }
 
 double Solver::BCD(int i_l0, int i_l1, int i_l2){
@@ -638,6 +678,9 @@ std::vector<std::vector<double> > Solver::find_best_beta(std::vector<std::vector
             for(int i_l0 = 0; i_l0 < lambda0.size(); i_l0++){ //L0 parameter
                     double obj = BCD(i_l0,i_l1,i_l2);
                     double mse = MSE(i_l0,i_l1,i_l2,Xval,yval);
+
+                    val_errors[i_l0][i_l1][i_l2] = mse;
+
                     if(VERBOSE){
                         log_file << "Objective : " << obj << " Validation mse " << mse << std::flush << std::endl;
                     }
@@ -673,6 +716,9 @@ std::vector<std::vector<double> > Solver::find_best_beta(std::vector<std::vector
                     else{
                         error_val = log_loss(i_l0,i_l1,i_l2,Xval,yval);
                     }
+
+                    val_errors[i_l0][i_l1][i_l2] = error_val;
+
                     if(VERBOSE){
                         log_file << "Objective : " << obj << " Validation error " << error_val << std::flush << std::endl;
                     }
@@ -702,6 +748,9 @@ std::vector<std::vector<double> > Solver::find_best_beta(std::vector<std::vector
             for(int i_l0 = 0; i_l0 < lambda0.size(); i_l0++){ //L0 parameter
                     double obj = BCD(i_l0,i_l1,i_l2);
                     double mse = MSE(i_l0,i_l1,i_l2,Xval,Xcontval,yval);
+
+                    val_errors[i_l0][i_l1][i_l2] = mse;
+
                     if(VERBOSE){
                         log_file << "Objective : " << obj << " Validation mse " << mse << std::flush << std::endl;
                     }
@@ -739,6 +788,7 @@ std::vector<std::vector<double> > Solver::find_best_beta(std::vector<std::vector
                         error_val = log_loss(i_l0,i_l1,i_l2,Xval,Xcontval,yval);
                     }
 
+                    val_errors[i_l0][i_l1][i_l2] = error_val;
                     
                     if(VERBOSE){
                         log_file << "Objective : " << obj << " Validation error " << error_val << std::flush << std::endl;

@@ -17,6 +17,7 @@
 class Solver{
     public:
         std::vector<std::vector<std::vector< std::vector<std::vector<double> > > > > beta;
+        std::vector<std::vector<std::vector<double>>> val_errors;   // adding a new structure for keeping track of validation errors for each combination of lambda0, lambda1, and lambda2
         std::shared_ptr<std::vector<std::vector<double> > > beta0;
         int r; //number of groups
         int n;       

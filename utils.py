@@ -80,7 +80,7 @@ def generate_random_correlated(n,cov_mat,num_levels,sparsity=0,clustering=0,RNG=
 
 
 
-def BCD_wrapper(X,y,Xval,yval,Xcont=None,Xcontval=None,classification=False,numlevels_=None,l0_list = [0.0],l1_list = [0.0],l2_list = [0.01],whole_block=False ):
+def BCD_wrapper(X,y,Xval,yval,Xcont=None,Xcontval=None,classification=False,numlevels_=None,l0_list = [0.0],l1_list = [0.0],l2_list = [0.01], ):
     
     lib = cdll.LoadLibrary('/opt/ClusterLearn/univariate/proximal_c.so')
     lib.BCD_solve.argtypes = (ctypes.c_int,ctypes.c_int,ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_double), ctypes.c_int, ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double), ctypes.c_int,ctypes.POINTER(ctypes.c_double), ctypes.c_int,ctypes.POINTER(ctypes.c_double), ctypes.c_int,ctypes.POINTER(ctypes.c_int),ctypes.POINTER(ctypes.c_double),ctypes.POINTER(ctypes.c_double) )
@@ -138,21 +138,22 @@ def BCD_wrapper(X,y,Xval,yval,Xcont=None,Xcontval=None,classification=False,numl
     
     numlevels=numlevels.ctypes.data_as(ctypes.POINTER(ctypes.c_int))
     beta = np.zeros(p+1,dtype=np.double)
+    val_errors = np.zeros(nl0_c * nl1_c * nl2_c,dtype=np.double)
     if rcont == 0:
         start = time.time()
         if classification :
-            lib.BCD_classfier_solve(n_c,r_c,x,y,nval_c,xval,yval,l0,nl0_c,l1,nl1_c,l2,nl2_c,numlevels,beta0,beta.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+            lib.BCD_classfier_solve(n_c,r_c,x,y,nval_c,xval,yval,l0,nl0_c,l1,nl1_c,l2,nl2_c,numlevels,beta0,beta.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), val_errors.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
         else:
-            lib.BCD_solve(n_c,r_c,x,y,nval_c,xval,yval,l0,nl0_c,l1,nl1_c,l2,nl2_c,numlevels,beta0,beta.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+            lib.BCD_solve(n_c,r_c,x,y,nval_c,xval,yval,l0,nl0_c,l1,nl1_c,l2,nl2_c,numlevels,beta0,beta.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), val_errors.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
         tend = time.time() - start
     else:
         start = time.time()
         if classification:
-            lib.BCD_classfier_continuous_solve(n_c,r_c,rcont_c,x,xcont,y,nval_c,xval,xcontval,yval,l0,nl0_c,l1,nl1_c,l2,nl2_c,numlevels,beta0,beta.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+            lib.BCD_classfier_continuous_solve(n_c,r_c,rcont_c,x,xcont,y,nval_c,xval,xcontval,yval,l0,nl0_c,l1,nl1_c,l2,nl2_c,numlevels,beta0,beta.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), val_errors.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
         else:
-            lib.BCD_continuous_solve(n_c,r_c,rcont_c,x,xcont,y,nval_c,xval,xcontval,yval,l0,nl0_c,l1,nl1_c,l2,nl2_c,numlevels,beta0,beta.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+            lib.BCD_continuous_solve(n_c,r_c,rcont_c,x,xcont,y,nval_c,xval,xcontval,yval,l0,nl0_c,l1,nl1_c,l2,nl2_c,numlevels,beta0,beta.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), val_errors.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
         tend = time.time() - start
-    return beta,tend
+    return beta, tend, val_errors
 
 
 

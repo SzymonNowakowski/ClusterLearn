@@ -37,7 +37,7 @@ extern "C" void prox_dp_w(int n, double *y,double *w, double l0,double l1,double
 }
 */
 
-extern "C" void BCD_solve(int n,int r, int *x, double *y,int nval,int *xval, double *yval, double* l0,int nl0,double* l1,int nl1,double* l2,int nl2, int* num_levels,double * beta0 ,double *beta) {
+extern "C" void BCD_solve(int n,int r, int *x, double *y,int nval,int *xval, double *yval, double* l0,int nl0,double* l1,int nl1,double* l2,int nl2, int* num_levels,double * beta0 ,double *beta, double *val_errors=0) {
     auto y_vec = std::make_shared<std::vector<double> >(y,y+n);
     auto x_vec = std::make_shared< std::vector<std::vector<int> > > (n, std::vector<int>(r,-1));
 
@@ -80,9 +80,27 @@ extern "C" void BCD_solve(int n,int r, int *x, double *y,int nval,int *xval, dou
             flat_index++;
         }
     }
+
+    // copying validation errors to the output array (if provided)
+    if (val_errors) {
+        flat_index = 0;
+
+        for (int i = 0; i < lambda0.size(); i++) {
+            for (int j = 0; j < lambda1.size(); j++) {
+                for (int k = 0; k < lambda2.size(); k++) {
+
+                    // copy value from 3D vector in the solver object and save it to a flat array
+                    val_errors[flat_index] = solver->val_errors[i][j][k];
+                    flat_index++;
+
+                }
+            }
+        }
+    }
+    delete solver;
 }
 
-extern "C" void BCD_classfier_solve(int n,int r, int *x, int *y,int nval,int *xval, int *yval, double* l0,int nl0,double* l1,int nl1,double* l2,int nl2, int* num_levels,double * beta0 ,double *beta) {
+extern "C" void BCD_classfier_solve(int n,int r, int *x, int *y,int nval,int *xval, int *yval, double* l0,int nl0,double* l1,int nl1,double* l2,int nl2, int* num_levels,double * beta0 ,double *beta, double *val_errors=0) {
     auto y_vec = std::make_shared<std::vector<int> >(y,y+n);
     auto x_vec = std::make_shared< std::vector<std::vector<int> > > (n, std::vector<int>(r,-1));
 
@@ -124,10 +142,28 @@ extern "C" void BCD_classfier_solve(int n,int r, int *x, int *y,int nval,int *xv
             flat_index++;
         }
     }
+
+    // copying validation errors to the output array (if provided)
+    if (val_errors) {
+        flat_index = 0;
+
+        for (int i = 0; i < lambda0.size(); i++) {
+            for (int j = 0; j < lambda1.size(); j++) {
+                for (int k = 0; k < lambda2.size(); k++) {
+
+                    // copy value from 3D vector in the solver object and save it to a flat array
+                    val_errors[flat_index] = solver->val_errors[i][j][k];
+                    flat_index++;
+
+                }
+            }
+        }
+    }
+    delete solver;
 }
 
 
-extern "C" void BCD_continuous_solve(int n,int r,int rcont, int *x,double* xcont, double *y,int nval,int *xval, double * xcontval, double *yval, double* l0,int nl0,double* l1,int nl1,double* l2,int nl2, int* num_levels,double * beta0 ,double *beta) {
+extern "C" void BCD_continuous_solve(int n,int r,int rcont, int *x,double* xcont, double *y,int nval,int *xval, double * xcontval, double *yval, double* l0,int nl0,double* l1,int nl1,double* l2,int nl2, int* num_levels,double * beta0 ,double *beta, , double *val_errors=0) {
 
     
 
@@ -190,9 +226,27 @@ extern "C" void BCD_continuous_solve(int n,int r,int rcont, int *x,double* xcont
             flat_index++;
         }
     }
+
+    // copying validation errors to the output array (if provided)
+    if (val_errors) {
+        flat_index = 0;
+
+        for (int i = 0; i < lambda0.size(); i++) {
+            for (int j = 0; j < lambda1.size(); j++) {
+                for (int k = 0; k < lambda2.size(); k++) {
+
+                    // copy value from 3D vector in the solver object and save it to a flat array
+                    val_errors[flat_index] = solver->val_errors[i][j][k];
+                    flat_index++;
+
+                }
+            }
+        }
+    }
+    delete solver;
 }
 
-extern "C" void BCD_classfier_continuous_solve(int n,int r,int rcont, int *x,double* xcont, int *y,int nval,int *xval, double * xcontval, int *yval, double* l0,int nl0,double* l1,int nl1,double* l2,int nl2, int* num_levels,double * beta0 ,double *beta) {
+extern "C" void BCD_classfier_continuous_solve(int n,int r,int rcont, int *x,double* xcont, int *y,int nval,int *xval, double * xcontval, int *yval, double* l0,int nl0,double* l1,int nl1,double* l2,int nl2, int* num_levels,double * beta0 ,double *beta, double *val_errors=0) {
 
     std::ofstream log_file;
     log_file.open("interface.log");
@@ -259,4 +313,22 @@ extern "C" void BCD_classfier_continuous_solve(int n,int r,int rcont, int *x,dou
             flat_index++;
         }
     }
+
+    // copying validation errors to the output array (if provided)
+    if (val_errors) {
+        flat_index = 0;
+
+        for (int i = 0; i < lambda0.size(); i++) {
+            for (int j = 0; j < lambda1.size(); j++) {
+                for (int k = 0; k < lambda2.size(); k++) {
+
+                    // copy value from 3D vector in the solver object and save it to a flat array
+                    val_errors[flat_index] = solver->val_errors[i][j][k];
+                    flat_index++;
+
+                }
+            }
+        }
+    }
+    delete solver;
 }
