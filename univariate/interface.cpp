@@ -163,7 +163,7 @@ extern "C" void BCD_classfier_solve(int n,int r, int *x, int *y,int nval,int *xv
 }
 
 
-extern "C" void BCD_continuous_solve(int n,int r,int rcont, int *x,double* xcont, double *y,int nval,int *xval, double * xcontval, double *yval, double* l0,int nl0,double* l1,int nl1,double* l2,int nl2, int* num_levels,double * beta0 ,double *beta, , double *val_errors=0) {
+extern "C" void BCD_continuous_solve(int n,int r,int rcont, int *x,double* xcont, double *y,int nval,int *xval, double * xcontval, double *yval, double* l0,int nl0,double* l1,int nl1,double* l2,int nl2, int* num_levels,double * beta0 ,double *beta, double *val_errors=0) {
 
     
 
