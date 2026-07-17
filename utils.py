@@ -155,10 +155,6 @@ def BCD_wrapper(X,y,Xval,yval,Xcont=None,Xcontval=None,classification=False,numl
         tend = time.time() - start
     return beta, tend, val_errors
 
-
-
-
-
 def classification_metrics(beta, groups, y_test, X_test,intercept=0):
     xtb = X_test@beta + intercept
     probabilty = 1/(np.exp(-xtb) + 1)
